@@ -1,3 +1,4 @@
+import { User } from 'src/auth/user.entity';
 import { EntityRepository, Repository } from 'typeorm';
 import { Customer } from './customer.entity';
 import { CreateCustomerDto } from './dto/create-customer.dto';
@@ -7,18 +8,20 @@ import { GetCustomersFilterDto } from './dto/get-customers-filter.dto';
 export class CustomersRepository extends Repository<Customer> {
   /**
    * Custom method to simplify the logic in the Customer Service file
-   * 
+   *
    * @param createCustomerDto CreateCustomerDto
    * @returns Promise<Customer>
    */
   async createCustomer(
     createCustomerDto: CreateCustomerDto,
+    user: User,
   ): Promise<Customer> {
     const { field1, field2 } = createCustomerDto;
 
     const customer = this.create({
       field1,
       field2,
+      users: [user],
     });
 
     await this.save(customer);

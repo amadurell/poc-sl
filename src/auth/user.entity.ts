@@ -1,6 +1,13 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Customer } from 'src/customers/customer.entity';
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
-@Entity()
+@Entity('users')
 export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -10,4 +17,10 @@ export class User {
 
   @Column()
   password: string;
+
+  @JoinTable()
+  @ManyToMany((_type) => Customer, (customer) => customer.users, {
+    eager: false,
+  })
+  customers: Customer[];
 }

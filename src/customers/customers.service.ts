@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException, Param } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { User } from 'src/auth/user.entity';
 import { Connection } from 'typeorm';
 import { Customer } from './customer.entity';
 import { CustomersRepository } from './customers.repository';
@@ -29,8 +30,8 @@ export class CustomersService {
    * @param createCustomerDto CreateCustomerDto. The Data Transfer Object for Customer creation.
    * @returns Promise<Customer>
    */
-  createCustomer(createCustomerDto: CreateCustomerDto): Promise<Customer> {
-    return this.customersRepository.createCustomer(createCustomerDto);
+  createCustomer(createCustomerDto: CreateCustomerDto, user: User): Promise<Customer> {
+    return this.customersRepository.createCustomer(createCustomerDto, user);
   }
 
   /**

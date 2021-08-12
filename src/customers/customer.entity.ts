@@ -1,4 +1,12 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Exclude } from 'class-transformer';
+import { User } from 'src/auth/user.entity';
+import {
+  Column,
+  Entity,
+  ManyToMany,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity('customers')
 export class Customer {
@@ -10,4 +18,8 @@ export class Customer {
 
   @Column()
   field2: string;
+
+  @ManyToMany((type) => User, (user) => user.customers, { eager: true })
+  @Exclude({ toPlainOnly: true })
+  users: User[];
 }
