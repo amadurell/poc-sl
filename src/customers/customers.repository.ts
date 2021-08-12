@@ -6,6 +6,26 @@ import { GetCustomersFilterDto } from './dto/get-customers-filter.dto';
 @EntityRepository(Customer)
 export class CustomersRepository extends Repository<Customer> {
   /**
+   * Custom method to simplify the logic in the Customer Service file
+   * 
+   * @param createCustomerDto CreateCustomerDto
+   * @returns Promise<Customer>
+   */
+  async createCustomer(
+    createCustomerDto: CreateCustomerDto,
+  ): Promise<Customer> {
+    const { field1, field2 } = createCustomerDto;
+
+    const customer = this.create({
+      field1,
+      field2,
+    });
+
+    await this.save(customer);
+    return customer;
+  }
+
+  /**
    * Custom method to cover all retrieve operations with filter conditions
    * (or all customers if no filters are provided).
    *
@@ -33,25 +53,5 @@ export class CustomersRepository extends Repository<Customer> {
 
     const customers = query.getMany();
     return customers;
-  }
-
-  /**
-   * Custom method to simplify the logic in the Customer Service file
-   * @param createCustomerDto CreateCustomerDto
-   * @returns Promise<Customer>
-   */
-  async createCustomer(
-    createCustomerDto: CreateCustomerDto,
-  ): Promise<Customer> {
-    console.log(createCustomerDto instanceof CreateCustomerDto);
-    const { field1, field2 } = createCustomerDto;
-
-    const customer = this.create({
-      field1,
-      field2,
-    });
-
-    await this.save(customer);
-    return customer;
   }
 }

@@ -7,6 +7,7 @@ import { CustomersModule } from './customers/customers.module';
 import { CustomersController } from './customers/customers.controller';
 import { CustomersService } from './customers/customers.service';
 import { CustomersRepository } from './customers/customers.repository';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { CustomersRepository } from './customers/customers.repository';
       }),
     }),
     CustomersModule,
+    AuthModule,
   ],
   controllers: [AppController, CustomersController],
   providers: [AppService, CustomersService, CustomersRepository],
