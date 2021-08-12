@@ -30,14 +30,20 @@ export class CustomersRepository extends Repository<Customer> {
 
   /**
    * Custom method to cover all retrieve operations with filter conditions
-   * (or all customers if no filters are provided).
+   * (or all customers related to the signed in user, if no filters are provided).
    *
    * @param filterDto GetCustomersFilterDto
+   * @param user User
    * @returns Promise<Customer[]>
    */
-  async getCustomers(filterDto: GetCustomersFilterDto): Promise<Customer[]> {
+  async getCustomers(
+    filterDto: GetCustomersFilterDto,
+    user: User,
+  ): Promise<Customer[]> {
     const { field1, field2, search } = filterDto;
     const query = this.createQueryBuilder('customer');
+
+    query.where({ user });
 
     if (field1) {
       query.andWhere('customer.field1 = :field1', { field1 });

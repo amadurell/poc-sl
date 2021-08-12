@@ -28,20 +28,28 @@ export class CustomersService {
    * The "Create" in CRUD
    *
    * @param createCustomerDto CreateCustomerDto. The Data Transfer Object for Customer creation.
+   * @param user User. The currently signed in User.
    * @returns Promise<Customer>
    */
-  createCustomer(createCustomerDto: CreateCustomerDto, user: User): Promise<Customer> {
+  createCustomer(
+    createCustomerDto: CreateCustomerDto,
+    user: User,
+  ): Promise<Customer> {
     return this.customersRepository.createCustomer(createCustomerDto, user);
   }
 
   /**
    * The "Retrieve" in CRUD.
-   * 
-   * @param filterDto GetCustomersFilterDto Query parameters to filter the collection with. For instance, ?field1=Cliente Samsung. 
+   *
+   * @param filterDto GetCustomersFilterDto Query parameters to filter the collection with. For instance, ?field1=Cliente Samsung.
+   * @param user User. The currently signed in User.
    * @returns Promise<Customer[]>
    */
-  getCustomers(filterDto: GetCustomersFilterDto): Promise<Customer[]> {
-    return this.customersRepository.getCustomers(filterDto);
+  getCustomers(
+    filterDto: GetCustomersFilterDto,
+    user: User,
+  ): Promise<Customer[]> {
+    return this.customersRepository.getCustomers(filterDto, user);
   }
 
   /**
@@ -63,7 +71,7 @@ export class CustomersService {
 
   /**
    * The "Update" in CRUD
-   * 
+   *
    * @param id string The id of the customer to update.
    * @param updateCustomerDto UpdateCustomerDto A partial Customer entity containing the data to update.
    * @returns Promise<Customer>
