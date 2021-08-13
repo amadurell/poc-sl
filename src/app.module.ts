@@ -8,6 +8,7 @@ import { CustomersController } from './customers/customers.controller';
 import { CustomersService } from './customers/customers.service';
 import { CustomersRepository } from './customers/customers.repository';
 import { AuthModule } from './auth/auth.module';
+import { ProjectsModule } from './projects/projects.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { AuthModule } from './auth/auth.module';
     }),
     CustomersModule,
     AuthModule,
+    ProjectsModule,
   ],
   controllers: [AppController, CustomersController],
   providers: [AppService, CustomersService, CustomersRepository],

@@ -31,35 +31,36 @@ export class CustomersController {
     @Body() createCustomerDto: CreateCustomerDto,
     @GetUser() user: User,
   ): Promise<Customer> {
-    console.log(createCustomerDto);
     return this.customersService.createCustomer(createCustomerDto, user);
   }
 
   @Get('/:id')
-  getCustomerById(@Param('id') id: string): Promise<Customer> {
-    return this.customersService.getCustomerById(id);
+  getCustomerById(
+    @Param('id') id: string,
+    @GetUser() user: User,
+  ): Promise<Customer> {
+    return this.customersService.getCustomerById(id, user);
   }
 
   @Get()
-  getCustomers(@Query() filterDto: GetCustomersFilterDto): Promise<Customer[]> {
-    return this.customersService.getCustomers(filterDto);
+  getCustomers(
+    @Query() filterDto: GetCustomersFilterDto,
+    @GetUser() user: User,
+  ): Promise<Customer[]> {
+    return this.customersService.getCustomers(filterDto, user);
   }
 
   @Patch('/:id')
   updateCustomer(
     @Param('id') id: string,
     @Body() updateCustomerDto: UpdateCustomerDto,
+    @GetUser() user: User,
   ): Promise<Customer> {
-    return this.customersService.updateCustomer(id, updateCustomerDto);
+    return this.customersService.updateCustomer(id, updateCustomerDto, user);
   }
 
   @Delete('/:id')
   deleteCustomer(@Param('id') id: string): Promise<void> {
     return this.customersService.deleteCustomer(id);
-  }
-
-  @Delete()
-  deleteCustomers(): Promise<void> {
-    return this.customersService.deleteCustomers();
   }
 }

@@ -15,7 +15,7 @@ export class AuthService {
   ) {}
 
   /**
-   * The method to create a new User
+   * Creates a new User
    *
    * @param authCredentialsDto AuthCredentialsDto
    * @returns Promise<void>
@@ -25,18 +25,20 @@ export class AuthService {
   }
 
   /**
-   * The method to authenticate a User
-   * 
+   * Authenticates a User
+   *
    * @param authCredentialsDto AuthCredentialsDto object containing username and password
    * @returns Promise<string>
    * @throws UnauthorizedException if either the user doesn't exist or the password doesn't match
    */
-  async signIn(authCredentialsDto: AuthCredentialsDto): Promise<{ accessToken: string }> {
+  async signIn(
+    authCredentialsDto: AuthCredentialsDto,
+  ): Promise<{ accessToken: string }> {
     const { username, password } = authCredentialsDto;
     const user = await this.usersRepository.findOne({ username });
     if (user && (await bcrypt.compare(password, user.password))) {
       const payload: JwtPayload = { username };
-      const accessToken: string = await this.jwtService.sign(payload);
+      const accessToken: string = this.jwtService.sign(payload);
       return { accessToken };
     } else {
       throw new UnauthorizedException('Please check your login credentials');

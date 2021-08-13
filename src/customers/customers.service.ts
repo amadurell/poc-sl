@@ -1,5 +1,8 @@
-import { Injectable, NotFoundException, Param } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { User } from 'src/auth/user.entity';
 import { Connection } from 'typeorm';
 import { Customer } from './customer.entity';
@@ -59,11 +62,17 @@ export class CustomersService {
    * @returns Promise<Customer>
    * @throws NotFoundException if the provided id doesn't match any existing customer
    */
-  async getCustomerById(id: string): Promise<Customer> {
+  async getCustomerById(id: string, user: User): Promise<Customer> {
     const customer = await this.customersRepository.findOne(id);
 
     if (!customer) {
       throw new NotFoundException(`Customer with ID "${id}" not found`);
+    }
+
+    if (!customer.users.some((owner) => owner.id === user.id)) {
+      throw new UnauthorizedException(
+        `The currently signed in user is not authorized to access this customer's data.`,
+      );
     }
 
     return customer;
@@ -74,21 +83,15 @@ export class CustomersService {
    *
    * @param id string The id of the customer to update.
    * @param updateCustomerDto UpdateCustomerDto A partial Customer entity containing the data to update.
+   * @param user User. The currently signed in User.
    * @returns Promise<Customer>
-   * @throws NotFoundException if the provided id doesn't match any existing customer
    */
-  async updateCustomer(
+  updateCustomer(
     id: string,
     updateCustomerDto: UpdateCustomerDto,
+    user: User,
   ): Promise<Customer> {
-    const customer: Customer = await this.customersRepository.preload({
-      id,
-      ...updateCustomerDto,
-    });
-    if (!customer) {
-      throw new NotFoundException(`Customer with ID "${id}" not found`);
-    }
-    return this.customersRepository.save(customer);
+    return this.customersRepository.updateCustomer(id, updateCustomerDto, user);
   }
 
   /**
@@ -103,12 +106,5 @@ export class CustomersService {
     if (result.affected === 0) {
       throw new NotFoundException(`Customer with ID "${id}" not found`);
     }
-  }
-
-  /**
-   * Just a quick and dirty TRUNCATE on the customers table.
-   */
-  async deleteCustomers(): Promise<void> {
-    await this.customersRepository.clear();
   }
 }
