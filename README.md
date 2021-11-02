@@ -1,6 +1,6 @@
 ## Description
 
-Back-end assignment for Sistemi Lab running on [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Back-end PoC for Sistemi Lab running on [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
 ## Installation
 
